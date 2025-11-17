@@ -26,6 +26,7 @@ merged["timestamp_dt"] = pd.to_datetime(merged["timestamp"], unit="ms")
 
 bac_per_user = merged.groupby("userId")["breathAlcoholValue"].max()
 drinkers = bac_per_user[bac_per_user > 0].index
+print(f"Number of drinkers: {len(drinkers)}")
 merged = merged[merged["userId"].isin(drinkers)]
 
 # ============================================================
