@@ -40,6 +40,11 @@ first_two_sessions = (
 sessions_to_remove = set(sid for arr in first_two_sessions for sid in arr)
 merged = merged[~merged["sessionId"].isin(sessions_to_remove)]
 
+# new_order = ["userId", "sessionId", "timestamp", "breathAlcoholValue", "hasTapped", "reactionTimeMs", "distanceFromTargetNormalized"]
+# merged = merged[new_order]
+
+# merged.to_csv("results.csv", index=False)
+
 # ============================================================
 # 4) PIPELINE A — include misses as max error
 # ============================================================
