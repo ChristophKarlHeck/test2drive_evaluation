@@ -1,24 +1,17 @@
-import random
 import yaml
 
-def generate_codes(n):
-    codes = set()
-    while len(codes) < n:
-        code = f"{random.randint(0, 9999):04d}"
-        if code != "0000":  # reserve admin
-            codes.add(code)
-    return sorted(list(codes))
+class QuotedSafeDumper(yaml.SafeDumper):
+    pass
+
+def str_as_single_quoted(dumper, data):
+    return dumper.represent_scalar("tag:yaml.org,2002:str", data, style="'")
+
+QuotedSafeDumper.add_representer(str, str_as_single_quoted)
 
 if __name__ == "__main__":
-    NUM_PARTICIPANTS = 50
-
-    data = {
-        "participants": [{"id": "0000"}] + [
-            {"id": code} for code in generate_codes(NUM_PARTICIPANTS)
-        ]
-    }
+    data = {"participants": [{"id": f"{i:03d}"} for i in range(1000)]}  # 000..999
 
     with open("participants.yaml", "w") as f:
-        yaml.dump(data, f, sort_keys=False)
+        yaml.dump(data, f, Dumper=QuotedSafeDumper, sort_keys=False)
 
     print("Generated participants.yaml")
